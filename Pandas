@@ -1,0 +1,78 @@
+import pandas as pd
+import numpy as np
+try:
+    df = pd.read_csv("E:\\CAT Task\\MEOA.csv",usecols=['OrderEvent', 'Firm ROE ID','Event Type','Event Timestamp','Symbol','Side','Price','Quantity'])
+    df['Firm ROE ID'] =pd.to_datetime(df['Event Timestamp']).dt.date # update date
+
+    if df['Event Type'].eq('MEOA').all(): # check if Event Type has value MEOA replace with MENO
+        df.loc[df['Event Type'] == 'MEOA', 'Event Type'] = 'MENO'
+
+    if df['Price'].isna().any(): # check if Price has no value then replace with MKT
+        df['Price'] = df['Price'].fillna('MKT')
+
+    df['OrderType'] = np.where(df['Price'].notnull(), 'LMT', 'MKT') # if Price has value then LMT if not MKT
+    df['OrderEvent'] = 'New'
+
+    df['TIF'] = np.where(df['Event Timestamp'].notnull(), pd.to_datetime(df['Event Timestamp']).dt.date, '')
+    print(df['TIF'])
+    df['Fix_Col_0'] = ''
+    df['CAT IMID'] = ''
+    df['Order ID'] = ''
+    df['Fix_Col_1'] = ''
+    df['Fix_Col_2'] = ''
+    df['Fix_Col_3'] = ''
+    df['Fix_Col_4'] = ''
+    df['Fix_Col_5'] = ''
+    df['Fix_Col_6'] = ''
+    df['Fix_Col_7'] = ''
+    df['Fix_Col_8'] = ''
+    df['Fix_Col_9'] = ''
+    df['Fix_Col_10'] = ''
+    df['Fix_Col_11'] = ''
+    df['FDID'] = ''
+    df['Acc Type'] = 'A'
+    df['Fix_Col_12'] = ''
+    df['Fix_Col_13'] = ''
+    df['Fix_Col_14'] = ''
+    df['Fix_Col_15'] = ''
+    df['Fix_Col_16'] = ''
+    df['Fix_Col_17'] = ''
+    df['Fix_Col_18'] = ''
+    df['Fix_Col_19'] = ''
+    df['Fix_Col_20'] = ''
+    df['Fix_Col_21'] = ''
+    df['Fix_Col_22'] = ''
+    df['Fix_Col_23'] = ''
+    df['Fix_Col_24'] = ''
+    df['Fix_Col_25'] = ''
+    df['Fix_Col_26'] = ''
+    df['Fix_Col_27'] = ''
+    df['Fix_Col_28'] = ''
+
+    df.loc[0:12,['Firm ROE ID', 'Event Type', 'Event Timestamp', 'Symbol', 'Side', 'Price', 'Quantity', 'OrderType', 'OrderEvent', 'TIF']]
+except Exception as e:
+    print(e)
+
+
+
+
+columns = [
+    'Order Event', 'Fix_Col_0', 'Firm Row ID', 'MsgType', 'CAT IMID ( UserInput)',
+    'Date (get date from MEOA TimeStamp at Index 22)', 'Order ID', 'Symbol (get Data from MEOA Index 19)',
+    'TimeStamp (at Index 22)', 'Fix_Col_1', 'Fix_Col_2', 'Fix_Col_3', 'Fix_Col_4', 'Fix_Col_5',
+    'Fix_Col_6', 'Fix_Col_7', 'Fix_Col_8', 'SideType at Index 24', 'Price (Index 25)',
+    'Quantity (Index 26)', 'Fix_Col-29', 'OrderType (if price is available at Index 25) then LMT if not then MKT',
+    'TIF (index at 22 GTX=22 Index)', 'Trading Session (UserInput)', 'Fix_Col_10', 'Fix_Col_11',
+    'FDID (UserInput)', 'Acc Type', 'Fix_Col_12', 'Fix_Col_13', 'Fix_Col-14', 'Fix_Col-15',
+    'Fix_Col-16', 'Fix_Col-17', 'Fix_Col-18', 'Fix_Col-19', 'Fix_Col-20', 'Fix_Col-21',
+    'Fix_Col-22', 'Fix_Col-23', 'Fix_Col-24', 'Fix_Col-25', 'Fix_Col-26', 'Fix_Col-27',
+    'Fix_Col-28'
+]
+
+df = pd.DataFrame(columns=columns)
+print(df)
+#EventType = df.loc[:,['Event Type']]
+#print(EventType)
+#res = df.isnull().values.all(axis=0) # return List
+#print(df.isnull()) # return all columns value with Nan values other than nan
+#print(df[df['Firm ROE ID'].isnull()])
