@@ -76,3 +76,36 @@ print(df)
 #res = df.isnull().values.all(axis=0) # return List
 #print(df.isnull()) # return all columns value with Nan values other than nan
 #print(df[df['Firm ROE ID'].isnull()])
+
+
+
+import pandas as pd
+import numpy as np
+
+try:
+    df = pd.read_csv("E:\\CAT Task\\MEOA.csv", usecols=['OrderEvent', 'Firm ROE ID', 'Event Type', 'Event Timestamp', 'Symbol', 'Side', 'Price', 'Quantity'])
+    df['Firm Row ID'] = pd.to_datetime(df['Event Timestamp']).dt.date  # update date
+
+    if df['Event Type'].eq('MEOA').all():  # check if Event Type has value MEOA replace with MENO
+        df.loc[df['Event Type'] == 'MEOA', 'Event Type'] = 'MENO'
+
+    if df['Price'].isna().any():  # check if Price has no value then replace with MKT
+        df['Price'] = df['Price'].fillna('MKT')
+
+    df['OrderType'] = np.where(df['Price'].notnull(), 'LMT', 'MKT')  # if Price has value then LMT if not MKT
+    df['OrderEvent'] = 'New'
+
+    df['TIF'] = np.where(df['Event Timestamp'].notnull(), pd.to_datetime(df['Event Timestamp']).dt.date, '')
+
+    # Print TIF column values to verify
+    print(df['TIF'])
+
+    # Create Fix_Col_0 to Fix_Col_28 with empty string values
+    for i in range(29):
+        df[f'Fix_Col_{i}'] = ''
+
+    # Display DataFrame with added data into respective columns
+    print(df)
+
+except Exception as e:
+    print(e)
