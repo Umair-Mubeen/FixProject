@@ -109,3 +109,36 @@ try:
 
 except Exception as e:
     print(e)
+
+
+import pandas as pd
+
+# Read the CSV file and extract necessary columns
+df = pd.read_csv("E:\\CAT Task\\MEOA.csv", usecols=['OrderEvent', 'Firm ROE ID', 'Event Type', 'Event Timestamp', 'Symbol', 'Side', 'Price', 'Quantity'])
+
+# Convert 'Event Timestamp' to datetime
+df['Event Timestamp'] = pd.to_datetime(df['Event Timestamp'])
+
+# Sort the DataFrame by 'Event Timestamp' if needed
+df = df.sort_values(by='Event Timestamp')
+
+# Initialize counter
+counter = 1
+
+# Iterate through DataFrame and create 'Firm Row ID'
+for index, row in df.iterrows():
+    # Extract date from 'Event Timestamp' column and format as 'ddmmyyyy'
+    date_str = row['Event Timestamp'].strftime('%d%m%Y')
+    
+    # Format counter with leading zeros if necessary
+    counter_str = f'{counter:02}'
+    
+    # Concatenate date, 'MCV', and counter
+    df.at[index, 'Firm Row ID'] = f"{date_str}_MCV_{counter_str}"
+    
+    # Increment counter
+    counter += 1
+
+# Print the DataFrame to verify
+print(df)
+
